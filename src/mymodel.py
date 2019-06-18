@@ -3,6 +3,9 @@ from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import LabelEncoder
 import numpy as np
 from sklearn.model_selection import train_test_split
+import yaml 
+
+config = yaml.load(  open('config/config.yml')  )
 
 url = "http://tinyurl.com/titanic-csv" 
 data = pd.read_csv(url)
@@ -37,7 +40,7 @@ df_candidate['Age'] = df_candidate['Age'].fillna(0)
 df_candidate['SexCode'] = df_candidate['SexCode'].fillna(0)
 df_candidate['pclass'] = df_candidate['pclass'].fillna(0)
 
-print(df_candidate)
+#print(df_candidate)
 
 
 # build the model with lineal regression
@@ -50,6 +53,9 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random
 # fit the model
 linreg  = LinearRegression()
 linreg.fit(X_train, y_train)
+
+# write down df
+df_candidate.to_csv(config['target_path'], index=False)
 
 # evaluate model
 accuracy = linreg.score(X_test,y_test)
